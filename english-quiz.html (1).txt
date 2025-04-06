@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>اختبار المفردات الإنجليزية المتقدم</title>
+<style>
+:root {
+--primary: #4a6bdf;
+--secondary: #f8f9fa;
+--accent: #ff6b6b;
+--text: #2c3e50;
+}
+
+body {
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+background-color: #f5f7fa;
+color: var(--text);
+line-height: 1.6;
+margin: 0;
+padding: 0;
+}
+
+.container {
+max-width: 800px;
+margin: 0 auto;
+padding: 2rem;
+}
+
+header {
+background: linear-gradient(135deg, var(--primary), #6a11cb);
+color: white;
+padding: 1.5rem;
+border-radius: 10px;
+margin-bottom: 2rem;
+box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#user-section {
+background-color: white;
+padding: 1.5rem;
+border-radius: 8px;
+margin-bottom: 1.5rem;
+box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.form-group {
+margin-bottom: 1rem;
+}
+
+label {
+display: block;
+margin-bottom: 0.5rem;
+font-weight: 600;
+}
+
+input, select {
+width: 100%;
+padding: 0.75rem;
+border: 1px solid #ddd;
+border-radius: 4px;
+font-size: 1rem;
+}
+
+button {
+background-color: var(--primary);
+color: white;
+border: none;
+padding: 0.75rem 1.5rem;
+border-radius: 4px;
+cursor: pointer;
+font-size: 1rem;
+transition: all 0.3s ease;
+margin-top: 1rem;
+}
+
+button:hover {
+background-color: #3a56c4;
+transform: translateY(-2px);
+}
+
+#quiz-container {
+display: none;
+background-color: white;
+padding: 2rem;
+border-radius: 8px;
+box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.question-container {
+margin-bottom: 2rem;
+}
+
+.question-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 1rem;
+}
+
+.question-number {
+background-color: var(--primary);
+color: white;
+padding: 0.5rem 1rem;
+border-radius: 20px;
+font-size: 0.9rem;
+}
+
+.timer {
+background-color: var(--accent);
+color: white;
+padding: 0.5rem 1rem;
+border-radius: 20px;
+font-family: monospace;
+}
+
+.question-text {
+font-size: 1.2rem;
+margin-bottom: 1.5rem;
+font-weight: 600;
+}
+
+.options-container {
+display: grid;
+grid-template-columns: 1fr;
+gap: 1rem;
+}
+
+.option-btn {
+background-color: var(--secondary);
+border: 1px solid #ddd;
+padding: 1rem;
+border-radius: 8px;
+cursor: pointer;
+transition: all 0.2s ease;
+text-align: right;
+}
+
+.option-btn:hover {
+background-color: #e9ecef;
+border-color: var(--primary);
+}
+
+.option-btn.selected {
+background-color: var(--primary);
+color: white;
+border-color: var(--primary);
+}
+
+.navigation {
+display: flex;
+justify-content: space-between;
+margin-top: 2rem;
+}
+
+#result-container {
+display: none;
+background-color: white;
+padding: 2rem;
+border-radius: 8px;
+box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+text-align: center;
+}
+
+.result-header {
+font-size: 1.5rem;
+margin-bottom: 1rem;
+color: var(--primary);
+}
+
+.score {
+font-size: 2.5rem;
+font-weight: bold;
+color: var(--accent);
+margin: 1rem 0;
+}
+
+.progress-container {
+height: 10px;
+background-color: #e9ecef;
+border-radius: 5px;
+margin: 1.5rem 0;
+overflow: hidden;
+}
+
+.progress-bar {
+height: 100%;
+background: linear-gradient(90deg, var(--accent), #ff8e53);
+transition: width 0.5s ease;
+}
+
+.feedback {
+margin: 1rem 0;
+font-size: 1.1rem;
+}
+
+.details-btn {
+background-color: transparent;
+color: var(--primary);
+border: 1px solid var(--primary);
+margin-top: 1.5rem;
+}
+
+.details-btn:hover {
+background-color: var(--primary);
+color: white;
+}
+
+#details-container {
+display: none;
+margin-top: 2rem;
+text-align: right;
+}
+
+.question-review {
+padding: 1rem;
+border-bottom: 1px solid #eee;
+}
+
+.correct {
+color: #28a745;
+}
+
+.incorrect {
+color: #dc3545;
+}
+
+@media (max-width: 768px) {
+.container {
+padding: 1rem;
+}
+
+header {
+padding: 1rem;
+}
+
+.question-text {
+font-size: 1.1rem;
+}
+}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+<h1>اختبار المفردات الإنجليزية المتقدم</h1>
+<p>اختبر معرفتك باللغة الإنجليزية مع أسئلة متنوعة وتحدي الوقت</p>
+</header>
+
+<section id="user-section">
+<div class="form-group">
+<label for="username">اسم المستخدم</label>
+<input type="text" id="username" placeholder="أدخل اسمك">
+</div>
+
+<div class="form-group">
+<label for="difficulty">مستوى الصعوبة</label>
+<select id="difficulty">
+<option value="easy">سهل (10 أسئلة - دقيقتان)</option>
+<option value="medium">متوسط (15 سؤال - دقيقة ونصف)</option>
+<option value="hard">صعب (20 سؤال - دقيقة واحدة)</option>
+</select>
+</div>
+
+<button id="start-btn">ابدأ الاختبار</button>
+</section>
+
+<section id="quiz-container">
+<div class="question-header">
+<div class="question-number">سؤال 1 من 10</div>
+<div class="timer">01:30</div>
+</div>
+
+<div class="question-container">
+<div class="question-text">What is the meaning of "anniversary"?</div>
+
+<div class="options-container">
+<div class="option-btn">A type of food</div>
+<div class="option-btn">A special day that comes once a year</div>
+<div class="option-btn">A famous person</div>
+<div class="option-btn">A large group of people</div>
+</div>
+</div>
+
+<div class="navigation">
+<button id="prev-btn" disabled>السابق</button>
+<button id="next-btn">التالي</button>
+</div>
+</section>
+
+<section id="result-container">
+<div class="result-header">نتيجة الاختبار</div>
+<div id="user-result">عزيزي <span class="username">محمد</span>،</div>
+<div class="score">85%</div>
+
+<div class="progress-container">
+<div class="progress-bar" style="width: 85%"></div>
+</div>
+
+<div class="feedback">أحسنت! لديك معرفة جيدة بالمفردات الإنجليزية</div>
+
+<button id="details-btn" class="details-btn">عرض التفاصيل</button>
+<button id="restart-btn">إعادة الاختبار</button>
+
+<div id="details-container">
+<h3>تفاصيل الإجابات:</h3>
+<!-- سيتم ملؤها بالجافاسكريبت -->
+</div>
+</section>
+</div>
+
+<script>
+// بيانات الأسئلة المطورة
+const questions = [
+{
+question: "What is the meaning of 'anniversary'?",
+options: [
+"A type of food",
+"A special day that comes once a year to celebrate a past event",
+"A famous person",
+"A large group of people"
+],
+answer: 1,
+explanation: "الذكرى السنوية هي يوم خاص يأتي مرة كل سنة للاحتفال بحدث ماضي"
+},
+{
+question: "Which of these is 'flammable'?",
+options: [
+"Water",
+"Glass",
+"Paper",
+"Metal"
+],
+answer: 2,
+explanation: "الورق مادة قابلة للاشتعال بسهولة"
+},
+{
+question: "What does 'to graduate' mean?",
+options: [
+"To start a new job",
+"To complete a course of study successfully",
+"To travel abroad",
+"To get married"
+],
+answer: 1,
+explanation: "التخرج يعني إكمال دورة دراسية بنجاح"
+},
+{
+question: "Which device creates colorful sky displays?",
+options: [
+"Hairdryer",
+"Firework",
+"Flash drive",
+"Monitor"
+],
+answer: 1,
+explanation: "الألعاب النارية تخلق عروضاً ملونة في السماء"
+},
+{
+question: "What season has the coldest weather?",
+options: [
+"Spring",
+"Summer",
+"Autumn",
+"Winter"
+],
+answer: 3,
+explanation: "الشتاء هو الفصل الأكثر برودة"
+},
+{
+question: "Who designs buildings?",
+options: [
+"Carpenter",
+"Architect",
+"Politician",
+"Celebrity"
+],
+answer: 1,
+explanation: "المهندس المعماري هو الذي يصمم المباني"
+},
+{
+question: "What do you call a public procession with music?",
+options: [
+"Interview",
+"Parade",
+"Session",
+"Ceremony"
+],
+answer: 1,
+explanation: "الموكب هو مسيرة عامة مع الموسيقى"
+},
+{
+question: "Which bird is traditional for Thanksgiving?",
+options: [
+"Chicken",
+"Duck",
+"Turkey",
+"Pigeon"
+],
+answer: 2,
+explanation: "الديك الرومي هو الطبق التقليدي لعيد الشكر"
+},
+{
+question: "What comes after seventh?",
+options: [
+"Sixth",
+"Eighth",
+"Tenth",
+"Third"
+],
+answer: 1,
+explanation: "الثامن يأتي بعد السابع"
+},
+{
+question: "Which device is used for drying hair?",
+options: [
+"Flash drive",
+"Hairdryer",
+"Monitor",
+"Firework"
+],
+answer: 1,
+explanation: "مجفف الشعر يستخدم لتجفيف الشعر"
+}
+];
+
+// متغيرات التطبيق
+let currentQuestion = 0;
+let score = 0;
+let userAnswers = [];
+let timer;
+let timeLeft;
+let username = "";
+
+// عناصر DOM
+const userSection = document.getElementById('user-section');
+const quizContainer = document.getElementById('quiz-container');
+const resultContainer = document.getElementById('result-container');
+const startBtn = document.getElementById('start-btn');
+const prevBtn = document.getElementById('prev-btn');
+const nextBtn = document.getElementById('next-btn');
+const restartBtn = document.getElementById('restart-btn');
+const detailsBtn = document.getElementById('details-btn');
+const usernameInput = document.getElementById('username');
+const difficultySelect = document.getElementById('difficulty');
+const questionNumberEl = document.querySelector('.question-number');
+const timerEl = document.querySelector('.timer');
+const questionTextEl = document.querySelector('.question-text');
+const optionsContainer = document.querySelector('.options-container');
+const userResultEl = document.getElementById('user-result');
+const scoreEl = document.querySelector('.score');
+const progressBar = document.querySelector('.progress-bar');
+const feedbackEl = document.querySelector('.feedback');
+const detailsContainer = document.getElementById('details-container');
+
+// أحداث
+startBtn.addEventListener('click', startQuiz);
+prevBtn.addEventListener('click', prevQuestion);
+nextBtn.addEventListener('click', nextQuestion);
+restartBtn.addEventListener('click', restartQuiz);
+detailsBtn.addEventListener('click', toggleDetails);
+
+// بدء الاختبار
+function startQuiz() {
+username = usernameInput.value.trim();
+
+if (!username) {
+alert('الرجاء إدخال اسم المستخدم');
+return;
+}
+
+// تحديد مستوى الصعوبة
+const difficulty = difficultySelect.value;
+let totalQuestions, totalTime;
+
+switch(difficulty) {
+case 'easy':
+totalQuestions = 10;
+totalTime = 120; // ثانيتين
+break;
+case 'medium':
+totalQuestions = 15;
+totalTime = 90;
+break;
+case 'hard':
+totalQuestions = 20;
+totalTime = 60;
+break;
+}
+
+// تهيئة المتغيرات
+currentQuestion = 0;
+score = 0;
+userAnswers = [];
+timeLeft = totalTime;
+
+// إخفاء واظهار الأقسام المناسبة
+userSection.style.display = 'none';
+quizContainer.style.display = 'block';
+resultContainer.style.display = 'none';
+
+// بدء المؤقت
+startTimer();
+
+// عرض السؤال الأول
+showQuestion();
+}
+
+// عرض السؤال الحالي
+function showQuestion() {
+const question = questions[currentQuestion];
+
+// تحديث معلومات السؤال
+questionNumberEl.textContent = `سؤال ${currentQuestion + 1} من ${questions.length}`;
+questionTextEl.textContent = question.question;
+
+// مسح الخيارات السابقة
+optionsContainer.innerHTML = '';
+
+// إضافة الخيارات الجديدة
+question.options.forEach((option, index) => {
+const optionBtn = document.createElement('div');
+optionBtn.classList.add('option-btn');
+optionBtn.textContent = option;
+
+// تمييز الإجابة المختارة مسبقاً إن وجدت
+if (userAnswers[currentQuestion] !== undefined && userAnswers[currentQuestion] === index) {
+optionBtn.classList.add('selected');
+}
+
+optionBtn.addEventListener('click', () => selectOption(index));
+optionsContainer.appendChild(optionBtn);
+});
+
+// تحديث أزرار التنقل
+prevBtn.disabled = currentQuestion === 0;
+nextBtn.textContent = currentQuestion === questions.length - 1 ? 'إنهاء' : 'التالي';
+}
+
+// اختيار إجابة
+function selectOption(index) {
+// إزالة التحديد من جميع الخيارات
+document.querySelectorAll('.option-btn').forEach(btn => {
+btn.classList.remove('selected');
+});
+
+// تحديد الخيار المختار
+event.target.classList.add('selected');
+
+// حفظ الإجابة
+userAnswers[currentQuestion] = index;
+}
+
+// السؤال السابق
+function prevQuestion() {
+if (currentQuestion > 0) {
+currentQuestion--;
+showQuestion();
+}
+}
+
+// السؤال التالي
+function nextQuestion() {
+// التحقق من وجود إجابة إذا لم يكن السؤال الأخير
+if (currentQuestion < questions.length - 1 && userAnswers[currentQuestion] === undefined) {
+alert('الرجاء اختيار إجابة قبل المتابعة');
+return;
+}
+
+if (currentQuestion < questions.length - 1) {
+currentQuestion++;
+showQuestion();
+} else {
+finishQuiz();
+}
+}
+
+// بدء المؤقت
+function startTimer() {
+clearInterval(timer);
+
+timer = setInterval(() => {
+timeLeft--;
+
+// تحديث عرض المؤقت
+const minutes = Math.floor(timeLeft / 60);
+const seconds = timeLeft % 60;
+timerEl.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+// تغيير اللون عند اقتراب النهاية
+if (timeLeft <= 10) {
+timerEl.style.backgroundColor = '#dc3545';
+}
+
+// انتهاء الوقت
+if (timeLeft <= 0) {
+clearInterval(timer);
+finishQuiz();
+}
+}, 1000);
+}
+
+// إنهاء الاختبار
+function finishQuiz() {
+clearInterval(timer);
+
+// حساب النتيجة
+calculateScore();
+
+// عرض النتيجة
+showResult();
+}
+
+// حساب النتيجة
+function calculateScore() {
+score = 0;
+
+questions.forEach((question, index) => {
+if (userAnswers[index] !== undefined && userAnswers[index] === question.answer) {
+score++;
+}
+});
+}
+
+// عرض النتيجة
+function showResult() {
+quizContainer.style.display = 'none';
+resultContainer.style.display = 'block';
+
+const percentage = Math.round((score / questions.length) * 100);
+
+// تحديث بيانات النتيجة
+userResultEl.innerHTML = `عزيزي <span class="username">${username}</span>،`;
+scoreEl.textContent = `${percentage}%`;
+progressBar.style.width = `${percentage}%`;
+
+// تقديم تغذية راجعة حسب الأداء
+if (percentage >= 80) {
+feedbackEl.textContent = 'ممتاز! لديك معرفة رائعة بالمفردات الإنجليزية';
+} else if (percentage >= 60) {
+feedbackEl.textContent = 'جيد جداً! لديك معرفة جيدة لكن يمكنك التحسن أكثر';
+} else if (percentage >= 40) {
+feedbackEl.textContent = 'ليس سيئاً! ننصحك بممارسة المزيد من المفردات';
+} else {
+feedbackEl.textContent = 'تحتاج إلى تحسين! ننصحك بدراسة المفردات الأساسية';
+}
+}
+
+// عرض/إخفاء التفاصيل
+function toggleDetails() {
+if (detailsContainer.style.display === 'block') {
+detailsContainer.style.display = 'none';
+detailsBtn.textContent = 'عرض التفاصيل';
+} else {
+detailsContainer.style.display = 'block';
+detailsBtn.textContent = 'إخفاء التفاصيل';
+
+// ملء التفاصيل
+detailsContainer.innerHTML = '<h3>تفاصيل الإجابات:</h3>';
+
+questions.forEach((question, index) => {
+const reviewDiv = document.createElement('div');
+reviewDiv.classList.add('question-review');
+
+const questionP = document.createElement('p');
+questionP.textContent = `${index + 1}. ${question.question}`;
+reviewDiv.appendChild(questionP);
+
+const userAnswerP = document.createElement('p');
+const isCorrect = userAnswers[index] === question.answer;
+
+if (userAnswers[index] === undefined) {
+userAnswerP.textContent = 'لم تجب على هذا السؤال';
+userAnswerP.style.color = '#6c757d';
+} else {
+userAnswerP.innerHTML = `إجابتك: <span class="${isCorrect ? 'correct' : 'incorrect'}">${question.options[userAnswers[index]]}</span>`;
+
+if (!isCorrect) {
+const correctP = document.createElement('p');
+correctP.classList.add('correct');
+correctP.textContent = `الإجابة الصحيحة: ${question.options[question.answer]}`;
+reviewDiv.appendChild(correctP);
+}
+}
+
+reviewDiv.appendChild(userAnswerP);
+
+const explanationP = document.createElement('p');
+explanationP.textContent = question.explanation;
+explanationP.style.fontStyle = 'italic';
+explanationP.style.color = '#6c757d';
+reviewDiv.appendChild(explanationP);
+
+detailsContainer.appendChild(reviewDiv);
+});
+}
+}
+
+// إعادة الاختبار
+function restartQuiz() {
+resultContainer.style.display = 'none';
+userSection.style.display = 'block';
+detailsContainer.style.display = 'none';
+usernameInput.value = username;
+}
+</script>
+</body>
+</html>
